@@ -1,0 +1,86 @@
+/* Login Page CSS */
+
+.loginpage{
+    background-image: url("../assets/love-2-people.jpeg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.loginpage > h1{
+    color: palevioletred;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    margin: 0;
+    padding-top: 30px;
+    font-style: italic;
+}
+
+.login-container{
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 20vh;
+    margin-left: 50px;
+    height: 500px;
+    width: 500px;
+    background-color: #e4e4e4;
+    border-radius: 10px;
+    opacity: 0.8;
+}
+
+.login-container > h2{
+    padding-top: 30px;
+    font-size: 34px;
+    font-family: 'Dancing Script', cursive;
+    text-align: center;
+    color: lightcoral;
+}
+
+.login-container > h3{
+    text-align: center;
+    padding: 5px;
+}
+
+.login-container > div {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container > div input {
+    margin: 10px;
+    border: 0;
+    border-radius: 5px;
+    height: 50px;
+    width: 300px;
+}
+
+.login-container > div button {
+    width: 100px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fafafa;
+    border-color: lightcoral;
+    color: lightcoral;
+    padding: 8px 20px;
+}
+
+.login-container > div button:hover{
+    background-color: lightcoral;
+    border-color: #fafafa;
+    color: #fafafa; 
+}
+
+.login-container > p{
+    text-align: center;
+    font-size: 18px;
+    margin-top: 5px;
+    color: cornflowerblue;
+    cursor: pointer;
+}
