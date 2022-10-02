@@ -100,6 +100,38 @@
 
 /* Main Page */
 
+.hero{
+    font-family: 'Montserrat', sans-serif;
+}
+
 .hero > nav{
     display: flex;
+    justify-content: space-between;
+    background-color: lightsalmon;
+    padding: 15px 100px;
+    color: #fafafa
 }
+
+.hero > nav > ul{
+    display: flex;
+}
+
+.hero > nav > ul > li{
+    margin-right: 15px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.hero > nav > ul > li:hover{
+    background-color: #fafafa;
+    color: lightsalmon;
+}
+
+.hero > nav > ul > li:last-child{
+    margin-right: 0px;
+    cursor: pointer;
+}
+
+
+
+/* Utilities */
