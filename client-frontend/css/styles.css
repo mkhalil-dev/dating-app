@@ -107,7 +107,7 @@
 .hero > nav{
     display: flex;
     justify-content: space-between;
-    background-color: lightsalmon;
+    background-color: lightcoral;
     padding: 15px 100px;
     color: #fafafa
 }
@@ -132,6 +132,40 @@
     cursor: pointer;
 }
 
+.hero > hr{
+    background-color: none;
+    margin: 0;
+    border-bottom: 0; 
+    border-color: black;   
+}
+
+.hero > div {
+    background-color: lightcoral;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero > div button {
+    width: 150px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fafafa;
+    border-color: lightcoral;
+    color: rgb(210, 108, 108);
+    padding: 8px 20px;
+    cursor: pointer;
+}
+
+.hero > div button:hover{
+    background-color: lightcoral;
+    border-color: #fafafa;
+    color: #fafafa; 
+}
 
 
 /* Utilities */
