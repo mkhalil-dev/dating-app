@@ -50,11 +50,18 @@
     align-items: center;
 }
 
-.login-container > div input {
+.login-container > div > input {
     margin: 10px;
     border: 0;
     border-radius: 5px;
     height: 50px;
+    width: 300px;
+}
+
+.login-container > div > div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
     width: 300px;
 }
 
@@ -83,4 +90,16 @@
     margin-top: 5px;
     color: cornflowerblue;
     cursor: pointer;
+}
+
+.targGender{
+    width: 400px;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+/* Main Page */
+
+.hero > nav{
+    display: flex;
 }
