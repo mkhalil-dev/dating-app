@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 
 class userController extends Controller
 {
     function getUsers(Request $request, $id){
+
         $user = User::
                     where([
                         ["id", '=', $id],
@@ -77,14 +80,25 @@ class userController extends Controller
 
     }
 
-    function login($id){
-        $user = User::find($id);
+    function login(Request $request){
+        $user = User::
+                where([
+                    ["email", '=', $request->email],
+                ])
+                ->get();
         if(!$user){
             return response()->json([
-                "status" => "Failed",
+                "status" => "Error",
                 "message" => "User not found"
             ]);
         }
+        if($user[0]["password"] != $request->password){
+            return response()->json([
+                "status" => "Error",
+                "data" => "incorrect password"
+            ]);
+        }
+        $user = User::find($user[0]["id"]);
         function gen_uuid() {
             return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
                 mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
@@ -99,7 +113,8 @@ class userController extends Controller
         if($user->save()){
             return response()->json([
                 "status" => "Success",
-                "data" => $user
+                "userid" => $user["id"],
+                "token" => $user["auth_token"]
             ]);
         }
         return response()->json([
@@ -107,10 +122,6 @@ class userController extends Controller
             "data" => "Error creating a model"
         ]);
 
-    }
-
-    function get_feed(){
-        
     }
 
 }
