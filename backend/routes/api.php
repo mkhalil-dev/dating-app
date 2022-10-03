@@ -23,3 +23,5 @@ Route::post("/messages/{id}", [profileController::class, "getMessages"])->name("
 Route::post("/sendmessage", [profileController::class, "sendMessage"])->name("send-messages");
 Route::post("/block", [profileController::class, "block"])->name("block");
 Route::post("/unblock", [profileController::class, "unblock"])->name("unblock");
+Route::post("/favorite", [profileController::class, "favorite"])->name("favorite");
+Route::post("/unfavorite", [profileController::class, "unfavorite"])->name("unfavorite");

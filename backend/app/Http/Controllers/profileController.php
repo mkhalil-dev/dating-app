@@ -37,6 +37,12 @@ class profileController extends Controller
     }
 
     function block(Request $request){
+        Favorite::
+        where([
+            ['user_id', '=', $request->id],
+            ['favorited_id', '=', $request->block]
+        ])
+        ->delete();
         $check_block = Block::
                     where([
                         ['blocker_id', '=', $request->id],
@@ -71,6 +77,44 @@ class profileController extends Controller
         return response()->json([
             "status" => "Success",
             "data" => "Block Removed"
+        ]);
+    }
+
+    function favorite(Request $request){
+        $check_favorite = Favorite::
+                    where([
+                        ['user_id', '=', $request->id],
+                        ['favorited_id', '=', $request->favorite]
+                    ])
+                    ->get();
+        if(sizeof($check_favorite) != 0){
+            return response()->json([
+                "status" => "Failed",
+                "message" => "User already favorited"
+            ]);
+        }
+        $favorite = new Favorite;
+        $favorite->user_id = $request->id;
+        $favorite->favorited_id = $request->favorite;
+
+        if($favorite->save()){
+            return response()->json([
+                "status" => "Success",
+                "data" => $favorite
+            ]);
+        }
+    }
+
+    function unfavorite(Request $request){
+        Favorite::
+            where([
+                ['user_id', '=', $request->id],
+                ['favorited_id', '=', $request->unfavorite]
+            ])
+            ->delete();
+        return response()->json([
+            "status" => "Success",
+            "data" => "Favorite Removed"
         ]);
     }
 
