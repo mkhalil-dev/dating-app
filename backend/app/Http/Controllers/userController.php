@@ -18,6 +18,7 @@ class userController extends Controller
                             ["blocker_id", "=", $id]
                         ])
                         ->get();
+        $blockarray = [];
         foreach ($blocklist as $x) {
             $blockarray[] = $x['blocked_id'];
         }

@@ -114,6 +114,15 @@ const signup = async () => {
     dating_app.load_signup(true)
 }
 
-dating_app.load_matches = () => {
-    
+dating_app.load_matches = async () => {
+    const matchesBox = document.querySelector(".card-container");
+    const id = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+    const getMatches = `${dating_app.baseURL}/getusers/${id}`
+    const matchesData = new FormData();
+    matchesData.set("authToken", token)
+    const response = await dating_app.postAPI(getMatches, matchesData)
+    const data = await response.data.data
+    dating_app.Console("Feed API", data, false)
+    matchesBox.insertAdjacentHTML('beforeend', '<div class="card card0"><div class="card-border"><h2>Hii</h2><div class="icons"><i class="fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
 }
