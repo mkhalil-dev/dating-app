@@ -120,6 +120,7 @@
     margin-right: 15px;
     cursor: pointer;
     padding: 5px;
+    border-radius: 5px;
 }
 
 .hero > nav > ul > li:hover{
