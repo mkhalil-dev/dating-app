@@ -20,16 +20,27 @@ class userController extends Controller
                 "message" => "User not found"
             ]);
         }
-        $data = User::
-                    where([
-                        ["gender", '=', "F"],
-                        ['id', '!=', $id]
-                        ])
-                    ->orWhere([
-                        ["gender", '=', "M"],
-                        ['id', '!=', $id]
-                        ])
-                    ->get();
+        if($user[0]["favgender"] == "M"){
+            $gender = "M";
+        } else if ($user[0]["favgender"] == "F"){
+            $gender = "F";
+        } else {
+            $gender = "A";
+        }
+        if($gender != "A"){
+            $data = User::
+                        where([
+                            ["gender", '=', $gender],
+                            ['id', '!=', $id]
+                            ])
+                        ->get();
+        } else {
+            $data = User::
+                        where([
+                            ['id', '!=', $id]
+                            ])
+                        ->get();
+        }
         return response()->json([
             "status" => "Success",
             "data" => $data
