@@ -138,11 +138,12 @@
     margin: 0;
     border-bottom: 0; 
     border-color: black;   
+    opacity: 0.1;
 }
 
 .hero > div {
     background-color: lightcoral;
-    height: 60vh;
+    height: 75vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,5 +169,8 @@
     color: #fafafa; 
 }
 
+body{
+    background-color: #1A1E21;
+}
 
 /* Utilities */
