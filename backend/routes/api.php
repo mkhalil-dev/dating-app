@@ -21,3 +21,5 @@ Route::post("/user/{id?}", [userController::class, "addOrUpdateUser"])->name("ad
 Route::post("/login/{id}", [userController::class, "login"])->name("login-user");
 Route::post("/messages/{id}", [profileController::class, "getMessages"])->name("user-messages");
 Route::post("/sendmessage", [profileController::class, "sendMessage"])->name("send-messages");
+Route::post("/block", [profileController::class, "block"])->name("block");
+Route::post("/unblock", [profileController::class, "unblock"])->name("unblock");

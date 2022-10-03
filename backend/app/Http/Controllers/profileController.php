@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Messages;
-use App\Models\User;
+use App\Models\Block;
+use App\Models\Favorite;
 
 class profileController extends Controller
 {
@@ -34,4 +35,43 @@ class profileController extends Controller
             ]);
         }
     }
+
+    function block(Request $request){
+        $check_block = Block::
+                    where([
+                        ['blocker_id', '=', $request->id],
+                        ['blocked_id', '=', $request->block]
+                    ])
+                    ->get();
+        if(sizeof($check_block) != 0){
+            return response()->json([
+                "status" => "Failed",
+                "message" => "User already blocked"
+            ]);
+        }
+        $block = new Block;
+        $block->blocker_id = $request->id;
+        $block->blocked_id = $request->block;
+
+        if($block->save()){
+            return response()->json([
+                "status" => "Success",
+                "data" => $block
+            ]);
+        }
+    }
+
+    function unblock(Request $request){
+        Block::
+            where([
+                ['blocker_id', '=', $request->id],
+                ['blocked_id', '=', $request->unblock]
+            ])
+            ->delete();
+        return response()->json([
+            "status" => "Success",
+            "data" => "Block Removed"
+        ]);
+    }
+
 }
