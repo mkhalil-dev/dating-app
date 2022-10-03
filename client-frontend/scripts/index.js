@@ -80,7 +80,7 @@ const authenticate = (id, authToken, type) => {
 dating_app.load_signup = (retry = false) => {
     const joinBtn = document.getElementById("signup-btn")
     if (retry) {
-        const warningbox = document.getElementById("warn-email");
+        const warningbox = document.getElementById("email-warn");
         warningbox.innerText = "Email already in-use"
     }
     joinBtn.addEventListener('click', function() {
@@ -109,6 +109,7 @@ const signup = async () => {
     joinData.set("gender", gender)
     joinData.set("favgender", favgender)
     const response = await dating_app.postAPI(signup_url, joinData)
-    if(data && response.data["status"] == "Success") return authenticate(response.data["userid"], response.data["token"]);
+    const data =  await response.data
+    if(data && response.data["status"] == "Success") return authenticate(data.data["id"], data.data["auth_token"], "signup");
     dating_app.load_signup(true)
 }

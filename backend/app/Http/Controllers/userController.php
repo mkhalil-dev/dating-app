@@ -56,6 +56,19 @@ class userController extends Controller
         }else{
             $user = User::find($id);
         }
+        if($request->email){
+            $finduser = User::
+            where([
+                ["email", '=', $request->email],
+            ])
+            ->get();
+            if(sizeof($finduser) != 0){
+                return response()->json([
+                    "status" => "Failed",
+                    "message" => "email already exists"
+                ]);
+            }
+        }
 
         $user->name = $request->name ? $request->name : $user->name;
         $user->email = $request->email ? $request->email : $user->email;
@@ -65,6 +78,7 @@ class userController extends Controller
         $user->favgender = $request->favgender ? $request->favgender : $user->favgender;
         $user->image = $request->image ? $request->image : $user->image;
         $user->bio = $request->bio ? $request->bio : $user->bio;
+        if($id == "add") $user->auth_token = gen_uuid();
 
         if($user->save()){
             return response()->json([
@@ -99,17 +113,7 @@ class userController extends Controller
             ]);
         }
         $user = User::find($user[0]["id"]);
-        function gen_uuid() {
-            return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-                mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
-                mt_rand( 0, 0xffff ),
-                mt_rand( 0, 0x0fff ) | 0x4000,
-                mt_rand( 0, 0x3fff ) | 0x8000,
-                mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
-            );
-        }
-        $token = gen_uuid();
-        $user->auth_token = $token;
+        $user->auth_token = gen_uuid();
         if($user->save()){
             return response()->json([
                 "status" => "Success",
@@ -124,4 +128,14 @@ class userController extends Controller
 
     }
 
+}
+
+function gen_uuid() {
+    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+        mt_rand( 0, 0xffff ),
+        mt_rand( 0, 0x0fff ) | 0x4000,
+        mt_rand( 0, 0x3fff ) | 0x8000,
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+    );
 }
