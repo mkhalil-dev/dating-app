@@ -124,5 +124,7 @@ dating_app.load_matches = async () => {
     const response = await dating_app.postAPI(getMatches, matchesData)
     const data = await response.data.data
     dating_app.Console("Feed API", data, false)
-    matchesBox.insertAdjacentHTML('beforeend', '<div class="card card0"><div class="card-border"><h2>Hii</h2><div class="icons"><i class="fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
+    data.forEach(match => {
+        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><div class="icons"><i id="like-'+match.id+'" class="fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
+    });
 }

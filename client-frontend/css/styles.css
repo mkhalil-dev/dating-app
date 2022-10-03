@@ -236,11 +236,11 @@ body{
     margin: 30px 0;
   }
   .card0 {
-    background: url("https://i.pinimg.com/736x/8f/a0/51/8fa051251f5ac2d0b756027089fbffde--terry-o-neill-al-pacino.jpg") center center no-repeat;
+    background: url("../assets/IMG_7133.jpg") center center no-repeat;
     background-size: 300px;
   }
   .card0:hover {
-    background: url("https://i.pinimg.com/736x/8f/a0/51/8fa051251f5ac2d0b756027089fbffde--terry-o-neill-al-pacino.jpg") left center no-repeat;
+    background: url("../assets/IMG_7133.jpg") left center no-repeat;
     background-size: 600px;
   }
   .card0:hover h2 {
@@ -265,6 +265,7 @@ body{
   .fa {
     opacity: 0;
     transition: opacity 1s;
+    cursor: pointer;
   }
   .icons {
     position: absolute;
