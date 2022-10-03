@@ -113,3 +113,7 @@ const signup = async () => {
     if(data && response.data["status"] == "Success") return authenticate(data.data["id"], data.data["auth_token"], "signup");
     dating_app.load_signup(true)
 }
+
+dating_app.load_matches = () => {
+    
+}

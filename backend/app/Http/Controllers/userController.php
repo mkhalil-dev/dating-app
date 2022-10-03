@@ -4,13 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Block;
+
 use Illuminate\Support\Facades\Auth;
 
 
 class userController extends Controller
 {
     function getUsers(Request $request, $id){
-
+        $blocklist = Block::
+                        select("blocked_id")
+                        ->where([
+                            ["blocker_id", "=", $id]
+                        ])
+                        ->get();
+        foreach ($blocklist as $x) {
+            $blockarray[] = $x['blocked_id'];
+        }
+        $user = User::
+                    where([
+                        ["id", '=', $id],
+                        ["auth_token", '=', $request->authToken]
+                    ])
+                    ->whereNotIn('id', $blockarray)
+                    ->get();
         $user = User::
                     where([
                         ["id", '=', $id],
@@ -36,12 +53,14 @@ class userController extends Controller
                             ["gender", '=', $gender],
                             ['id', '!=', $id]
                             ])
+                        ->whereNotIn('id', $blockarray)
                         ->get();
         } else {
             $data = User::
                         where([
                             ['id', '!=', $id]
                             ])
+                        ->whereNotIn('id', $blockarray)
                         ->get();
         }
         return response()->json([
