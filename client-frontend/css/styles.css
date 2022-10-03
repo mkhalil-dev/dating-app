@@ -76,6 +76,7 @@
     border-color: lightcoral;
     color: lightcoral;
     padding: 8px 20px;
+    cursor: pointer;
 }
 
 .login-container > div button:hover{
@@ -87,15 +88,26 @@
 .login-container > p{
     text-align: center;
     font-size: 18px;
+    color: red;
+}
+
+.login-container > a > p{
+    text-align: center;
+    font-size: 18px;
     margin-top: 5px;
     color: cornflowerblue;
     cursor: pointer;
 }
 
 .targGender{
-    width: 400px;
+    min-width: 450px;
     display: flex;
     flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.warning{
+    font-size: 14px;
 }
 
 /* Main Page */

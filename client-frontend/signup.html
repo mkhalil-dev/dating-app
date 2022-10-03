@@ -18,20 +18,21 @@
             <h2>Sign Up</h2>
             <hr>
             <div>
-                <input type="text" id="username" placeholder="Username">
+                <input type="text" id="name" placeholder="Full Name">
+                <p id="email-warn" class="warning"></p>
                 <input type="email" id="email" placeholder="Email Address">
                 <input type="password" id="password" placeholder="Password">
-                <input type="text" id="name" placeholder="Full Name">
+                <input type="date" id="dob" placeholder="Date of Birth">
                 <div>
                     <div>
                         Gender:
                     </div>
                     <div>
-                        <input type="radio" id="male" name="fav_gender" value="HTML">
+                        <input type="radio" id="male" name="gender" value="M">
                         <label for="html">Male</label><br>
                     </div>
                     <div>
-                        <input type="radio" id="female" name="fav_gender" value="CSS">
+                        <input type="radio" id="female" name="gender" value="F">
                         <label for="css">Female</label><br>
                     </div>
                 </div>
@@ -40,21 +41,27 @@
                         Targeted Gender:
                     </div>
                     <div>
-                        <input type="radio" id="maletar" name="tar_gender" value="HTML">
+                        <input type="radio" id="male-target" name="favgender" value="M">
                         <label for="html">Male</label><br>
                     </div>
                     <div>
-                        <input type="radio" id="femaletar" name="tar_gender" value="HTML">
+                        <input type="radio" id="female-target" name="favgender" value="F">
                         <label for="html">Female</label><br>
                     </div>
                     <div>
-                        <input type="radio" id="anytar" name="tar_gender" value="CSS">
+                        <input type="radio" id="any-target" name="favgender" value="A">
                         <label for="css">Any</label><br>
                     </div>
                 </div>
                 <button id="signup-btn">Join</button>
+                <p id="notify"></p>
             </div>
         </div>
     </section>
+    <script src="./scripts/node_modules/axios/dist/axios.js"></script>
+    <script src="./scripts/index.js"></script>
+    <script>
+        dating_app.loadPage("signup");
+    </script>
 </body>
 </html>
