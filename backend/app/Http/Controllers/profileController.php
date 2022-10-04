@@ -9,11 +9,35 @@ use App\Models\Favorite;
 
 class profileController extends Controller
 {
-    function getMessages($id){
+    function getMessages($id, $id2){
         $messages = Messages::
-            where("sender_id", $id)
-                ->orWhere("receiver_id", $id)
-                ->with("User")
+            where([
+                ["sender_id", $id],
+                ["receiver_id", $id2]
+                ])
+                ->orWhere([
+                    ["receiver_id", $id],
+                    ["sender_id", $id2]
+                    ])
+                ->get();
+
+        return response()->json([
+        "status" => "Success",
+        "data" => $messages
+        ]);
+    }
+
+    function getContacts($id){
+        $messages = Messages::
+            where([
+                ["sender_id", $id],
+                ])
+                ->orWhere([
+                    ["receiver_id", $id],
+                    ])
+                ->with("senderInfo")
+                ->with("receiverInfo")
+                ->orderBy("created_at", "Desc")
                 ->get();
 
         return response()->json([

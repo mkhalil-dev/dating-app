@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post("/getusers/{id}", [userController::class, "getUsers"])->name("get-user");
 Route::post("/user/{id?}", [userController::class, "addOrUpdateUser"])->name("add-user");
-Route::post("/messages/{id}", [profileController::class, "getMessages"])->name("user-messages");
+Route::get("/messages/{id}/{id2}", [profileController::class, "getMessages"])->name("user-messages");
 Route::post("/sendmessage", [profileController::class, "sendMessage"])->name("send-messages");
 Route::post("/block", [profileController::class, "block"])->name("block");
 Route::post("/unblock", [profileController::class, "unblock"])->name("unblock");
@@ -26,3 +26,4 @@ Route::post("/favorite", [profileController::class, "favorite"])->name("favorite
 Route::get("/getfavorites/{id}", [profileController::class, "getFavorites"])->name("get-favorites");
 Route::post("/unfavorite", [profileController::class, "unfavorite"])->name("unfavorite");
 Route::post("/login", [userController::class, "login"])->name("login-user");
+Route::get("/contacts/{id}", [profileController::class, "getContacts"])->name("user-contacts");
