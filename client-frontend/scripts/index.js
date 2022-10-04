@@ -41,6 +41,14 @@ dating_app.loadPage = (page) => {
     eval("dating_app.load_" + page + "();");
 }
 
+const userId = () => {
+    return localStorage.getItem("id");
+}
+
+const userToken = () => {
+    return localStorage.getItem("token");
+}
+
 dating_app.load_login = (retry = false) => {
     const loginBtn = document.getElementById("login-btn")
     const warningbox = document.querySelector(".loginpage").getElementsByTagName("p")[0];
@@ -116,20 +124,47 @@ const signup = async () => {
 
 dating_app.load_matches = async () => {
     const matchesBox = document.querySelector(".card-container");
-    const id = localStorage.getItem("id");
-    const token = localStorage.getItem("token");
-    const getMatchesURL = `${dating_app.baseURL}/getusers/${id}`
+    const getMatchesURL = `${dating_app.baseURL}/getusers/${userId()}`
     const favoriteURL = `${dating_app.baseURL}/favorite`
     const matchesData = new FormData();
-    matchesData.set("authToken", token)
+    matchesData.set("authToken", userToken())
     const response = await dating_app.postAPI(getMatchesURL, matchesData)
     const data = await response.data.data
     dating_app.Console("Feed API", data, false)
     data.forEach(match => {
         matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
     });
+    addFavListeners()
 }
 
 
-const addFavListeners = () => {
+const addFavListeners = async () => {
+    const getFavoritesURL = `${dating_app.baseURL}/getfavorites/${userId()}`
+    const favoriteURL = `${dating_app.baseURL}/favorite`
+    const unfavoriteURL = `${dating_app.baseURL}/unfavorite`
+    const response = await dating_app.getAPI(getFavoritesURL)
+    const data = await response.data.data
+    document.querySelectorAll(".favorite").forEach(element => {
+        favId = element.id.split("-")[1];
+        data.includes(favId) ? favListener(element, favId, unfavoriteURL, false) : favListener(element, favId, favoriteURL)
+    });
+}
+
+const favListener = (button, id, url, favorite = true) => {
+    const parentButton = button.parentNode;
+    const favoriteURL = `${dating_app.baseURL}/favorite`
+    const unfavoriteURL = `${dating_app.baseURL}/unfavorite`
+    if(!favorite) parentButton.innerHTML = '<i id="like-'+id+'" class="favorite fa fa-solid fa-heart" style="color: red;"></i>'
+    else parentButton.innerHTML = '<i id="like-'+id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i>'
+    const like = document.getElementById("like-"+id);
+    like.addEventListener('click', function(e){
+        const favData = new FormData();
+        favData.set("id", userId());
+        favorite ? favData.set("favorite", id) : favData.set("unfavorite", id);
+        dating_app.postAPI(url, favData);
+        e.stopPropagation();
+        this.removeEventListener('click', arguments.callee);
+        if(!favorite) favListener(like, id, favoriteURL)
+        else favListener(like, id, unfavoriteURL, false)
+    })
 }
