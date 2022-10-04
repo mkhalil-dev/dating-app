@@ -205,6 +205,23 @@ dating_app.load_matches = async () => {
     addBanListeners()
 }
 
+dating_app.load_favorites = async () => {
+    menu_load();
+    const matchesBox = document.querySelector(".card-container");
+    const getMatchesURL = `${dating_app.baseURL}/listfavorites/${userId()}`
+    const response = await dating_app.getAPI(getMatchesURL)
+    const data = await response.data.data
+    data.forEach(match => {
+        match = match.user;
+        const age = getAge(match.dob)
+        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><h2 style="font-size: 14px;">'+age+' Years old</h2><h2 style="color: lightcoral;">'+match.bio+'</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i><i id="message-'+match.id+'" class="message fa fa-regular fa-message" aria-hidden="true"></i><i id="block-'+match.id+'" class="block fa fa-light fa-ban" aria-hidden="true"></i></div></div></div>')
+        document.getElementById(match.id).style.backgroundImage = "url('"+match.image+"')";
+    });
+    addMessageListeners()
+    addFavListeners()
+    addBanListeners()
+}
+
 const getAge = (dateString) => {
     let ageInMilliseconds = new Date() - new Date(dateString);
     return Math.floor(ageInMilliseconds/1000/60/60/24/365);

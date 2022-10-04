@@ -24,6 +24,7 @@ Route::post("/block", [profileController::class, "block"])->name("block");
 Route::post("/unblock", [profileController::class, "unblock"])->name("unblock");
 Route::post("/favorite", [profileController::class, "favorite"])->name("favorite");
 Route::get("/getfavorites/{id}", [profileController::class, "getFavorites"])->name("get-favorites");
+Route::get("/listfavorites/{id}", [profileController::class, "listFavorites"])->name("list-favorites");
 Route::get("/getbans/{id}", [profileController::class, "getBans"])->name("get-bans");
 Route::post("/unfavorite", [profileController::class, "unfavorite"])->name("unfavorite");
 Route::post("/login", [userController::class, "login"])->name("login-user");

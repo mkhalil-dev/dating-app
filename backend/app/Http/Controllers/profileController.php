@@ -84,6 +84,27 @@ class profileController extends Controller
         }
     }
 
+    function listFavorites($id){
+        $favlist = Favorite::
+                        where([
+                            ["user_id", "=", $id]
+                        ])
+                        ->with("User")
+                        ->get();
+        if(sizeof($favlist) != 0){
+            return response()->json([
+                "status" => "Success",
+                "data" => $favlist
+            ]);
+        }
+        else {
+            return response()->json([
+                "status" => "Success",
+                "data" => "empty"
+            ]);
+        }
+    }
+
     function getBans($id){
         $banlist = Block::
                         select("blocked_id")
