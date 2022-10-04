@@ -84,6 +84,30 @@ class profileController extends Controller
         }
     }
 
+    function getBans($id){
+        $banlist = Block::
+                        select("blocked_id")
+                        ->where([
+                            ["blocker_id", "=", $id]
+                        ])
+                        ->get();
+        $blockarray = [];
+        foreach ($banlist as $x) {
+            $blockarray[] = $x['blocked_id'];
+        }
+        if(sizeof($blockarray) != 0){
+            return response()->json([
+                "status" => "Success",
+                "data" => $blockarray
+            ]);
+        } else {
+            return response()->json([
+                "status" => "Failed",
+                "data" => "no blocks"
+            ]);
+        }
+    }
+
     function block(Request $request){
         Favorite::
         where([

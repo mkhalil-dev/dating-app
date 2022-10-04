@@ -145,6 +145,9 @@ const update = async () => {
     if(dob) joinData.set("dob", dob)
     if(gender) joinData.set("gender", gender)
     if(favgender) joinData.set("favgender", favgender)
+    const imageInput = document.getElementById("avatar").files[0]
+    const image = await toBase64(imageInput);
+    joinData.set("image", image)
     const update_url = `${dating_app.baseURL}/user/${userId()}`
     const response = await dating_app.postAPI(update_url, joinData)
     if(response.data.status == "Success"){
@@ -152,6 +155,13 @@ const update = async () => {
         responseMessage.innerText = "Profile Edited Successfully!"
     }
 }
+
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
 
 const signup = async () => {
     const signup_url = `${dating_app.baseURL}/user`
@@ -172,15 +182,16 @@ dating_app.load_matches = async () => {
     const data = await response.data.data
     data.forEach(match => {
         const age = getAge(match.dob)
-        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><h2 style="font-size: 14px;">'+age+' Years old</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i><i id="message-'+match.id+'" class="message fa fa-regular fa-message" aria-hidden="true"></i></div></div></div>')
+        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><h2 style="font-size: 14px;">'+age+' Years old</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i><i id="message-'+match.id+'" class="message fa fa-regular fa-message" aria-hidden="true"></i><i id="block-'+match.id+'" class="block fa fa-light fa-ban" aria-hidden="true"></i></div></div></div>')
     });
     addMessageListeners()
     addFavListeners()
+    addBanListeners()
 }
 
 const getAge = (dateString) => {
     let ageInMilliseconds = new Date() - new Date(dateString);
-    return Math.floor(ageInMilliseconds/1000/60/60/24/365); // convert to years
+    return Math.floor(ageInMilliseconds/1000/60/60/24/365);
  }
 
 const menu_load = () => {
@@ -226,8 +237,7 @@ const favListener = (button, id, url, favorite = true) => {
         button.classList.add("fa-solid")
         button.style.color="red"
         button.classList.remove("fa-regular")
-    }
-    else {
+    } else {
         button.style.color=""
         button.classList.remove("fa-solid")
         button.classList.add("fa-regular")
@@ -242,6 +252,32 @@ const favListener = (button, id, url, favorite = true) => {
         this.removeEventListener('click', arguments.callee);
         if(!favorite) favListener(like, id, favoriteURL)
         else favListener(like, id, unfavoriteURL, false)
+    })
+}
+
+const addBanListeners = async () => {
+    const blockURL = `${dating_app.baseURL}/block`
+    document.querySelectorAll(".block").forEach(element => {
+        blockId = element.id.split("-")[1];
+        banListener(element, blockId, blockURL)
+    });
+}
+
+const banListener = (button, id, url, blockStatus = false) => {
+    const blockURL = `${dating_app.baseURL}/block`
+    const unblockURL = `${dating_app.baseURL}/unblock`
+    if(blockStatus) button.style.color="red";
+    else button.style.color="";
+    const block = document.getElementById("block-"+id);
+    block.addEventListener('click', function(e){
+        const blockData = new FormData();
+        blockData.set("id", userId());
+        blockStatus ? blockData.set("unblock", id) : blockData.set("block", id);
+        dating_app.postAPI(url, blockData);
+        e.stopPropagation();
+        this.removeEventListener('click', arguments.callee);
+        if(blockStatus) banListener(block, id, blockURL)
+        else banListener(block, id, unblockURL, true)
     })
 }
 
@@ -287,6 +323,8 @@ dating_app.load_message = async () => {
         sendMessage(target)
     })
 }
+
+
 
 const displayMessages = (data) => {
     const chatBox = document.getElementById("chat-box");
