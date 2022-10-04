@@ -125,6 +125,27 @@
     color: #fafafa; 
 }
 
+.edit-profile button {
+  width: 100px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1;
+  border-width: 1px;
+  border-style: solid;
+  background-color: #fafafa;
+  border-color: lightcoral;
+  color: lightcoral;
+  padding: 8px 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.edit-profile button:hover{
+  background-color: lightcoral;
+  border-color: #fafafa;
+  color: #fafafa; 
+}
+
 .login-container > p{
     text-align: center;
     font-size: 18px;

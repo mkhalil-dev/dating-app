@@ -28,10 +28,7 @@
         <div class="edit-profile">
             <h2>Update your profile!</h2>
             <input type="text" id="name" placeholder="Full Name">
-            <p id="email-warn" class="warning"></p>
-            <input type="email" id="email" placeholder="Email Address">
             <input type="password" id="password" placeholder="Password">
-            <input type="text" id="location" placeholder="location">
             <select id="country" name="country">
                 <option>Your Country</option>
                 <option value="AF">Afghanistan</option>
@@ -288,6 +285,10 @@
                 <option value="ZW">Zimbabwe</option>
             </select>
             <input type="date" id="dob" placeholder="Date of Birth">
+            <div style="display: flex; justify-content: center; align-items: center; width: 35%;">
+            <label for="avatar" style="color: #fafafa;">Profile Picture:</label>
+            <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+            </div>
             <div>
                 <div>
                     Gender
@@ -318,6 +319,7 @@
                     <input type="radio" id="any-target" name="favgender" value="A">
                 </div>
         </div>
+        <button>Update</button>
     </section>
     <div>
       <footer class="bg-dark text-center text-white">
