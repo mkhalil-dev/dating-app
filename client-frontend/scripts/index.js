@@ -99,21 +99,28 @@ dating_app.load_signup = (retry = false) => {
     })
 }
 
-const profileFormData = () => {
+const profileFormData = async () => {
     let gender, favgender;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const name = document.getElementById("name").value;
+    const bio = document.getElementById("bio").value;
     const dob = document.getElementById("dob").value;
+    const country = document.getElementById("country").value;
     if (document.getElementById('male').checked) gender = document.getElementById('male').value;
     else if (document.getElementById('female').checked) gender = document.getElementById('female').value;
     if (document.getElementById('male-target').checked) favgender = document.getElementById('male-target').value;
     else if (document.getElementById('female-target').checked) favgender = document.getElementById('female-target').value;
     else if (document.getElementById('any-target').checked) favgender = document.getElementById('any-target').value;
     const joinData = new FormData();
+    const imageInput = document.getElementById("avatar").files[0]
+    const image = await toBase64(imageInput);
+    joinData.set("image", image)
+    joinData.set("location", country)
     joinData.set("email", email)
     joinData.set("password", password)
     joinData.set("name", name)
+    joinData.set("bio", bio)
     joinData.set("dob", dob)
     joinData.set("gender", gender)
     joinData.set("favgender", favgender)
@@ -131,9 +138,13 @@ const update = async () => {
     let password = document.getElementById("password");
     let name = document.getElementById("name");
     let dob = document.getElementById("dob");
+    let bio = document.getElementById("bio");
+    let country = document.getElementById("country");
     if(name) name = document.getElementById("name").value;
     if(password) password = document.getElementById("password").value;
+    if(bio) bio = document.getElementById("bio").value;
     if(dob) dob = document.getElementById("dob").value;
+    if(country) country = document.getElementById("country").value;
     if (document.getElementById('male').checked) gender = document.getElementById('male').value;
     else if (document.getElementById('female').checked) gender = document.getElementById('female').value;
     if (document.getElementById('male-target').checked) favgender = document.getElementById('male-target').value;
@@ -142,12 +153,16 @@ const update = async () => {
     const joinData = new FormData();
     if(password) joinData.set("password", password)
     if(name) joinData.set("name", name)
+    if(bio) joinData.set("bio", bio)
+    if(country) joinData.set("location", country)
     if(dob) joinData.set("dob", dob)
     if(gender) joinData.set("gender", gender)
     if(favgender) joinData.set("favgender", favgender)
     const imageInput = document.getElementById("avatar").files[0]
-    const image = await toBase64(imageInput);
-    joinData.set("image", image)
+    if(imageInput){
+        const image = await toBase64(imageInput);
+        joinData.set("image", image)
+    }
     const update_url = `${dating_app.baseURL}/user/${userId()}`
     const response = await dating_app.postAPI(update_url, joinData)
     if(response.data.status == "Success"){
@@ -159,13 +174,13 @@ const update = async () => {
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () => resolve(reader.result.split(",")[1]);
     reader.onerror = error => reject(error);
 });
 
 const signup = async () => {
     const signup_url = `${dating_app.baseURL}/user`
-    const joinData = profileFormData();
+    const joinData = await profileFormData();
     const response = await dating_app.postAPI(signup_url, joinData)
     const data =  await response.data
     if(data && response.data["status"] == "Success") return authenticate(data.data["id"], data.data["auth_token"], "signup");
@@ -182,7 +197,8 @@ dating_app.load_matches = async () => {
     const data = await response.data.data
     data.forEach(match => {
         const age = getAge(match.dob)
-        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><h2 style="font-size: 14px;">'+age+' Years old</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i><i id="message-'+match.id+'" class="message fa fa-regular fa-message" aria-hidden="true"></i><i id="block-'+match.id+'" class="block fa fa-light fa-ban" aria-hidden="true"></i></div></div></div>')
+        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><h2 style="font-size: 14px;">'+age+' Years old</h2><h2 style="color: lightcoral;">'+match.bio+'</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i><i id="message-'+match.id+'" class="message fa fa-regular fa-message" aria-hidden="true"></i><i id="block-'+match.id+'" class="block fa fa-light fa-ban" aria-hidden="true"></i></div></div></div>')
+        document.getElementById(match.id).style.backgroundImage = "url('"+match.image+"')";
     });
     addMessageListeners()
     addFavListeners()
@@ -198,6 +214,8 @@ const menu_load = () => {
    const loginLink = document.getElementById("nav-login")
    const signupLink = document.getElementById("nav-signup")
    if(userId() && userToken()){
+    loginLink.insertAdjacentHTML('beforebegin', '<a href="./favorite.html"><li>Favorites</li></a>')
+    loginLink.insertAdjacentHTML('beforebegin', '<a href="./editprofile.html"><li>Edit Profile</li></a>')
     signupLink.innerHTML = "<li>Logout</li>"
     loginLink.innerHTML = "<li>Message Center</li>"
     loginLink.href = "./center.html"
@@ -300,6 +318,7 @@ dating_app.load_center = async () => {
         if(addedContacts.includes(contactId) || !contactInfo) return;
         addedContacts.push(contactId)
         contactBox.insertAdjacentHTML('beforeend', '<div style="cursor: pointer;" id="'+contactId+'" class="card card0"><div class="card-border"><h2>'+contactInfo.name+'</h2></div></div>')
+        document.getElementById(contactId).style.backgroundImage = "url('"+contactInfo.image+"')";
         document.getElementById(contactId).addEventListener('click', function(e){
             target = e.target.parentNode.id;
             window.location.href = "./message.html?="+target;

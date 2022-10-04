@@ -88,14 +88,28 @@ class userController extends Controller
             }
         }
 
+
+
         $user->name = $request->name ? $request->name : $user->name;
         $user->email = $request->email ? $request->email : $user->email;
         $user->password = $request->password ? $request->password : $user->password;
         $user->dob = $request->dob ? $request->dob : $user->dob;
         $user->gender = $request->gender ? $request->gender : $user->gender;
         $user->favgender = $request->favgender ? $request->favgender : $user->favgender;
-        $user->image = $request->image ? $request->image : $user->image;
         $user->bio = $request->bio ? $request->bio : $user->bio;
+        $user->location = $request->location ? $request->location : $user->location;
+        
+        if($request->image){
+            $name = $user->name;
+            $rnd = mt_rand(1000000000,9999999999);
+            $name = str_replace(' ', '', $name);
+            $location = "../../client-frontend/assets/".$name.$rnd.".jpg";
+            $dbloc = "./assets/".$name.$rnd.".jpg";
+            $ifp = fopen($location , 'wb' ); 
+            fwrite( $ifp, base64_decode( $request->image ) );
+            fclose( $ifp ); 
+        }
+        $user->image = $request->image ? $dbloc : $user->image;
         if($id == "add") $user->auth_token = gen_uuid();
 
         if($user->save()){

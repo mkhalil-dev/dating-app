@@ -20,7 +20,7 @@
 
 .login-container{
     font-family: 'Montserrat', sans-serif;
-    margin-top: 20vh;
+    margin-top: 2vh;
     margin-left: 50px;
     min-height: 500px;
     width: 500px;
@@ -347,6 +347,11 @@ body{
   .card0:hover h2 {
     opacity: 1;
   }
+
+  .card0:hover p {
+    opacity: 1;
+  }
+  
   .card0:hover .fa {
     opacity: 1;
   }
