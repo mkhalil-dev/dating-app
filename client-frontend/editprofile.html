@@ -27,6 +27,7 @@
         <hr>
         <div class="edit-profile">
             <h2>Update your profile!</h2>
+            <h3 id="response" style="margin: 10px; color: green;"></h3>
             <input type="text" id="name" placeholder="Full Name">
             <input type="password" id="password" placeholder="Password">
             <select id="country" name="country">
@@ -285,7 +286,7 @@
                 <option value="ZW">Zimbabwe</option>
             </select>
             <input type="date" id="dob" placeholder="Date of Birth">
-            <div style="display: flex; justify-content: center; align-items: center; width: 35%;">
+            <div style="display: flex; justify-content: center; align-items: center; width: 35%; margin: 5px 0;">
             <label for="avatar" style="color: #fafafa;">Profile Picture:</label>
             <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
             </div>
@@ -319,7 +320,7 @@
                     <input type="radio" id="any-target" name="favgender" value="A">
                 </div>
         </div>
-        <button>Update</button>
+        <button id="update">Update</button>
     </section>
     <div>
       <footer class="bg-dark text-center text-white">
@@ -341,7 +342,7 @@
       <script src="./scripts/node_modules/axios/dist/axios.js"></script>
       <script src="./scripts/index.js"></script>
       <script>
-          dating_app.loadPage("main");
+          dating_app.loadPage("editProfile");
       </script>
   </div>
 </body>

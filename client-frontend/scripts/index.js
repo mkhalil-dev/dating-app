@@ -99,9 +99,8 @@ dating_app.load_signup = (retry = false) => {
     })
 }
 
-const signup = async () => {
+const profileFormData = () => {
     let gender, favgender;
-    const signup_url = `${dating_app.baseURL}/user`
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const name = document.getElementById("name").value;
@@ -118,6 +117,45 @@ const signup = async () => {
     joinData.set("dob", dob)
     joinData.set("gender", gender)
     joinData.set("favgender", favgender)
+    return joinData;
+}
+
+dating_app.load_editProfile = () => {
+    menu_load()
+    const updateBtn = document.getElementById("update")
+    updateBtn.addEventListener('click', update)
+}
+
+const update = async () => {
+    let gender, favgender;
+    let password = document.getElementById("password");
+    let name = document.getElementById("name");
+    let dob = document.getElementById("dob");
+    if(name) name = document.getElementById("name").value;
+    if(password) password = document.getElementById("password").value;
+    if(dob) dob = document.getElementById("dob").value;
+    if (document.getElementById('male').checked) gender = document.getElementById('male').value;
+    else if (document.getElementById('female').checked) gender = document.getElementById('female').value;
+    if (document.getElementById('male-target').checked) favgender = document.getElementById('male-target').value;
+    else if (document.getElementById('female-target').checked) favgender = document.getElementById('female-target').value;
+    else if (document.getElementById('any-target').checked) favgender = document.getElementById('any-target').value;
+    const joinData = new FormData();
+    if(password) joinData.set("password", password)
+    if(name) joinData.set("name", name)
+    if(dob) joinData.set("dob", dob)
+    if(gender) joinData.set("gender", gender)
+    if(favgender) joinData.set("favgender", favgender)
+    const update_url = `${dating_app.baseURL}/user/${userId()}`
+    const response = await dating_app.postAPI(update_url, joinData)
+    if(response.data.status == "Success"){
+        const responseMessage = document.getElementById("response");
+        responseMessage.innerText = "Profile Edited Successfully!"
+    }
+}
+
+const signup = async () => {
+    const signup_url = `${dating_app.baseURL}/user`
+    const joinData = profileFormData();
     const response = await dating_app.postAPI(signup_url, joinData)
     const data =  await response.data
     if(data && response.data["status"] == "Success") return authenticate(data.data["id"], data.data["auth_token"], "signup");
