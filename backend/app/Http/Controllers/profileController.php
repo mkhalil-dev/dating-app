@@ -36,6 +36,30 @@ class profileController extends Controller
         }
     }
 
+    function getFavorites($id){
+        $favlist = Favorite::
+                        select("favorited_id")
+                        ->where([
+                            ["user_id", "=", $id]
+                        ])
+                        ->get();
+        $favarray = [];
+        foreach ($favlist as $x) {
+            $favarray[] = $x['favorited_id'];
+        }
+        if(sizeof($favarray) != 0){
+            return response()->json([
+                "status" => "Success",
+                "data" => $favarray
+            ]);
+        } else {
+            return response()->json([
+                "status" => "Failed",
+                "data" => "No favorites"
+            ]);
+        }
+    }
+
     function block(Request $request){
         Favorite::
         where([

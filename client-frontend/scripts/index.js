@@ -118,13 +118,18 @@ dating_app.load_matches = async () => {
     const matchesBox = document.querySelector(".card-container");
     const id = localStorage.getItem("id");
     const token = localStorage.getItem("token");
-    const getMatches = `${dating_app.baseURL}/getusers/${id}`
+    const getMatchesURL = `${dating_app.baseURL}/getusers/${id}`
+    const favoriteURL = `${dating_app.baseURL}/favorite`
     const matchesData = new FormData();
     matchesData.set("authToken", token)
-    const response = await dating_app.postAPI(getMatches, matchesData)
+    const response = await dating_app.postAPI(getMatchesURL, matchesData)
     const data = await response.data.data
     dating_app.Console("Feed API", data, false)
     data.forEach(match => {
-        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><div class="icons"><i id="like-'+match.id+'" class="fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
+        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
     });
+}
+
+
+const addFavListeners = () => {
 }

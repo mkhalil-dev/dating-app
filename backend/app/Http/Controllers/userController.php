@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Block;
-
 use Illuminate\Support\Facades\Auth;
 
 
@@ -27,7 +26,6 @@ class userController extends Controller
                         ["id", '=', $id],
                         ["auth_token", '=', $request->authToken]
                     ])
-                    ->whereNotIn('id', $blockarray)
                     ->get();
         $user = User::
                     where([
