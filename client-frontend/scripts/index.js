@@ -129,6 +129,7 @@ const profileFormData = async () => {
 }
 
 dating_app.load_editProfile = () => {
+    if(!userId()) window.location.href = "./login.html"
     menu_load()
     const updateBtn = document.getElementById("update")
     updateBtn.addEventListener('click', update)
@@ -351,6 +352,7 @@ dating_app.load_main = () => {
 }
 
 dating_app.load_message = async () => {
+    if(!userId()) window.location.href = "./login.html"
     menu_load()
     const target = window.location.search.split("=")[1];
     const loadMessagesURL = `${dating_app.baseURL}/messages/${userId()}/${target}`
