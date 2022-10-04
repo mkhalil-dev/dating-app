@@ -50,6 +50,7 @@ const userToken = () => {
 }
 
 dating_app.load_login = (retry = false) => {
+    if(userId()) window.location.href = "./matches.html";
     const loginBtn = document.getElementById("login-btn")
     const warningbox = document.querySelector(".loginpage").getElementsByTagName("p")[0];
     if(retry) warningbox.innerText = "Incorrect user or password"
@@ -69,7 +70,7 @@ const login = async () => {
     const response = await dating_app.postAPI(login_url, loginData)
     const data = await response.data
     data["status"] == "Success" ? authenticate(data["userid"], data["token"], "login") : dating_app.load_login(true)
-    if(data["status"] == "Success") window.location.href = "./main.html";
+    if(data["status"] == "Success") window.location.href = "./matches.html";
 }
 
 const authenticate = (id, authToken, type) => {
@@ -81,7 +82,7 @@ const authenticate = (id, authToken, type) => {
         const notifybox = document.getElementById("notify");
         notifybox.style.color = "green"
         notifybox.innerText = "Signed up"
-        window.location.href = "./main.html";
+        window.location.href = "./matches.html";
     }
     localStorage.setItem("id", id)
     localStorage.setItem("token", authToken)
@@ -188,6 +189,7 @@ const signup = async () => {
 }
 
 dating_app.load_matches = async () => {
+    if(!userId()) window.location.href = "./login.html"
     menu_load();
     const matchesBox = document.querySelector(".card-container");
     const getMatchesURL = `${dating_app.baseURL}/getusers/${userId()}`
@@ -231,6 +233,7 @@ const menu_load = () => {
    const loginLink = document.getElementById("nav-login")
    const signupLink = document.getElementById("nav-signup")
    if(userId() && userToken()){
+    loginLink.insertAdjacentHTML('beforebegin', '<a href="./matches.html"><li>Find Matches</li></a>')
     loginLink.insertAdjacentHTML('beforebegin', '<a href="./favorite.html"><li>Favorites</li></a>')
     loginLink.insertAdjacentHTML('beforebegin', '<a href="./editprofile.html"><li>Edit Profile</li></a>')
     signupLink.innerHTML = "<li>Logout</li>"
