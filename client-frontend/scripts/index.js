@@ -69,6 +69,7 @@ const login = async () => {
     const response = await dating_app.postAPI(login_url, loginData)
     const data = await response.data
     data["status"] == "Success" ? authenticate(data["userid"], data["token"], "login") : dating_app.load_login(true)
+    if(data["status"] == "Success") window.location.href = "./main.html";
 }
 
 const authenticate = (id, authToken, type) => {
@@ -80,6 +81,7 @@ const authenticate = (id, authToken, type) => {
         const notifybox = document.getElementById("notify");
         notifybox.style.color = "green"
         notifybox.innerText = "Signed up"
+        window.location.href = "./main.html";
     }
     localStorage.setItem("id", id)
     localStorage.setItem("token", authToken)
@@ -123,19 +125,49 @@ const signup = async () => {
 }
 
 dating_app.load_matches = async () => {
+    menu_load();
     const matchesBox = document.querySelector(".card-container");
     const getMatchesURL = `${dating_app.baseURL}/getusers/${userId()}`
-    const favoriteURL = `${dating_app.baseURL}/favorite`
     const matchesData = new FormData();
     matchesData.set("authToken", userToken())
     const response = await dating_app.postAPI(getMatchesURL, matchesData)
     const data = await response.data.data
     data.forEach(match => {
-        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
+        const age = getAge(match.dob)
+        matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><h2 style="font-size: 14px;">'+age+' Years old</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i><i id="message-'+match.id+'" class="message fa fa-regular fa-message" aria-hidden="true"></i></div></div></div>')
     });
+    addMessageListeners()
     addFavListeners()
 }
 
+const getAge = (dateString) => {
+    let ageInMilliseconds = new Date() - new Date(dateString);
+    return Math.floor(ageInMilliseconds/1000/60/60/24/365); // convert to years
+ }
+
+const menu_load = () => {
+   const loginLink = document.getElementById("nav-login")
+   const signupLink = document.getElementById("nav-signup")
+   if(userId() && userToken()){
+    signupLink.innerHTML = "<li>Logout</li>"
+    loginLink.innerHTML = "<li>Message Center</li>"
+    loginLink.href = "./center.html"
+    signupLink.addEventListener('click', (e) => {
+        localStorage.clear();
+        window.location.reload()
+        e.preventDefault()
+    })
+   }
+}
+
+const addMessageListeners = () => {
+    document.querySelectorAll(".message").forEach(icon => {
+        icon.addEventListener('click', (e) => {
+            targetId = e.target.id.split("-")[1];
+            window.location.href = "./message.html?="+targetId;
+        })
+    });
+}
 
 const addFavListeners = async () => {
     const getFavoritesURL = `${dating_app.baseURL}/getfavorites/${userId()}`
@@ -150,11 +182,18 @@ const addFavListeners = async () => {
 }
 
 const favListener = (button, id, url, favorite = true) => {
-    const parentButton = button.parentNode;
     const favoriteURL = `${dating_app.baseURL}/favorite`
     const unfavoriteURL = `${dating_app.baseURL}/unfavorite`
-    if(!favorite) parentButton.innerHTML = '<i id="like-'+id+'" class="favorite fa fa-solid fa-heart" style="color: red;"></i>'
-    else parentButton.innerHTML = '<i id="like-'+id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i>'
+    if(!favorite) {
+        button.classList.add("fa-solid")
+        button.style.color="red"
+        button.classList.remove("fa-regular")
+    }
+    else {
+        button.style.color=""
+        button.classList.remove("fa-solid")
+        button.classList.add("fa-regular")
+    }
     const like = document.getElementById("like-"+id);
     like.addEventListener('click', function(e){
         const favData = new FormData();
@@ -169,6 +208,7 @@ const favListener = (button, id, url, favorite = true) => {
 }
 
 dating_app.load_center = async () => {
+    menu_load()
     let addedContacts = [];
     const contactBox = document.querySelector(".card-container");
     const getContactsURL = `${dating_app.baseURL}/contacts/${userId()}`
@@ -193,6 +233,51 @@ dating_app.load_center = async () => {
     });
 }
 
-dating_app.load_message = async () => {
+dating_app.load_main = () => {
+    menu_load()
+}
 
+dating_app.load_message = async () => {
+    menu_load()
+    const target = window.location.search.split("=")[1];
+    const loadMessagesURL = `${dating_app.baseURL}/messages/${userId()}/${target}`
+    const response = await dating_app.getAPI(loadMessagesURL)
+    const sendBtn = document.getElementById("send-btn");
+    const data = await response.data.data
+    displayMessages(data)
+    sendBtn.addEventListener('click', () => {
+        sendMessage(target)
+    })
+}
+
+const displayMessages = (data) => {
+    const chatBox = document.getElementById("chat-box");
+    data.forEach(message => {
+        let time;
+        if(message.created_at) {
+            time = message.created_at.split("T")[1].split(":")
+            time.pop()
+            time = time.join(":")
+        }
+        if(message.sender_id==userId()){
+            chatBox.insertAdjacentHTML('afterbegin', '<div class="container-chat"><p style="text-align: right;">'+message.content+'</p><span class="time-right">'+time+'</span></div>')
+        } else {
+            chatBox.insertAdjacentHTML('afterbegin', '<div class="container-chat darker-chat"><p>'+message.content+'</p><span class="time-left">'+time+'</span></div>')
+        }
+    });
+}
+
+const sendMessage = (targetId) => {
+    const messageURL = `${dating_app.baseURL}/sendmessage`
+    const message = document.getElementById("text-box").value;
+    document.getElementById("text-box").innerText = "";
+    const chatBox = document.getElementById("chat-box");
+    const today = new Date();
+    const time = today.getHours() + ":" + today.getMinutes()
+    chatBox.insertAdjacentHTML('afterbegin', '<div class="container-chat"><p style="text-align: right;">'+message+'</p><span class="time-right">'+time+'</span></div>')
+    const messageForm = new FormData();
+    messageForm.set("sender_id", userId())
+    messageForm.set("receiver_id", targetId)
+    messageForm.set("content", message)
+    dating_app.postAPI(messageURL, messageForm)
 }

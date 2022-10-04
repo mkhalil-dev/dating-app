@@ -19,28 +19,19 @@
             <p>Love Finder</p>
             <ul>
                 <a href="./main.html"><li>Home</li></a>
-                <a href=""><li>Find Matches</li></a>
-                <a href="./login.html"><li>Login</li></a>
-                <a href="./signup.html"><li>Sign up</li></a>
+                <a href="./matches.html"><li>Find Matches</li></a>
+                <a id="nav-login" href="./login.html"><li>Login</li></a>
+                <a id="nav-signup" href="./signup.html"><li>Sign up</li></a>
             </ul>
         </nav>
         <hr>
-        <div>
-            <h3>Messages</h3>
-            <div id="chat-box">
-                <div class="container-chat">
-                    <p>Hello. How are you today?</p>
-                    <span class="time-right">11:00</span>
-                </div>
-                
-                <div class="container-chat darker-chat">
-                <p>Hey! I'm fine. Thanks for asking!</p>
-                <span class="time-left">11:01</span>
-                </div>
-            </div>
+        <div class = "main-nav">
+            <h2 style="color: #fafafa">Message Center</h2>
             <div id="input">
-                <textarea class="none" placeholder="Text message"></textarea>
-                <button>Send</button>
+                <textarea id="text-box" class="none" placeholder="Text message"></textarea>
+                <button id="send-btn">Send</button>
+            </div>
+            <div id="chat-box">
             </div>
         </div>
     </section>
@@ -62,5 +53,10 @@
           </div>
       </footer>
   </div>
+  <script src="./scripts/node_modules/axios/dist/axios.js"></script>
+  <script src="./scripts/index.js"></script>
+  <script>
+      dating_app.loadPage("message");
+  </script>
 </body>
 </html>
