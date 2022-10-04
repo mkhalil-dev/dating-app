@@ -162,8 +162,21 @@ nav a{
     background-color: lightcoral;
     height: 75vh;
     display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+}
+
+.hero > div > div {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+.hero > div > textarea{
+  width: 500px;
 }
 
 .hero > div button {
@@ -188,6 +201,28 @@ nav a{
 
 body{
     background-color: #1A1E21;
+}
+
+#input{
+  display: flex;
+  flex-flow: row;
+  margin: 20px;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+#input > textarea{
+  width: 50%;
+  margin-right: 10px;
+}
+
+.none::-webkit-resizer {
+    display: none;
+}
+
+#input > button{
+  margin-bottom: 10px;
 }
 
 /* Matches */
@@ -287,3 +322,50 @@ body{
     text-align: center;
     color: lightcoral;
   }
+
+  /* Chat containers */
+.container-chat {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px 0;
+  width: 40%;
+}
+
+.darker-chat {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container-chat::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container-chat img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container-chat img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+/* Style time text */
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+/* Style time text */
+.time-left {
+  float: left;
+  color: #999;
+}
