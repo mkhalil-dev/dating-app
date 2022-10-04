@@ -130,7 +130,6 @@ dating_app.load_matches = async () => {
     matchesData.set("authToken", userToken())
     const response = await dating_app.postAPI(getMatchesURL, matchesData)
     const data = await response.data.data
-    dating_app.Console("Feed API", data, false)
     data.forEach(match => {
         matchesBox.insertAdjacentHTML('beforeend', '<div id="'+match.id+'" class="card card0"><div class="card-border"><h2>'+match.name+'</h2><div class="icons"><i id="like-'+match.id+'" class="favorite fa fa-regular fa-heart" aria-hidden="true"></i></div></div></div>')
     });
@@ -167,4 +166,33 @@ const favListener = (button, id, url, favorite = true) => {
         if(!favorite) favListener(like, id, favoriteURL)
         else favListener(like, id, unfavoriteURL, false)
     })
+}
+
+dating_app.load_center = async () => {
+    let addedContacts = [];
+    const contactBox = document.querySelector(".card-container");
+    const getContactsURL = `${dating_app.baseURL}/contacts/${userId()}`
+    const response = await dating_app.getAPI(getContactsURL)
+    const data = await response.data.data
+    data.forEach(contact => {
+        let contactInfo, contactId;
+        if(contact.sender_id == userId()){
+            contactId = contact.receiver_id
+            contactInfo = contact.receiver_info;
+        } else {
+            contactId = contact.sender_id;
+            contactInfo = contact.sender_info;
+        }
+        if(addedContacts.includes(contactId) || !contactInfo) return;
+        addedContacts.push(contactId)
+        contactBox.insertAdjacentHTML('beforeend', '<div style="cursor: pointer;" id="'+contactId+'" class="card card0"><div class="card-border"><h2>'+contactInfo.name+'</h2></div></div>')
+        document.getElementById(contactId).addEventListener('click', function(e){
+            target = e.target.parentNode.id;
+            window.location.href = "./message.html?="+target;
+        })
+    });
+}
+
+dating_app.load_message = async () => {
+
 }
