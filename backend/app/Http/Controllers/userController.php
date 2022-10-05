@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Block;
-use Illuminate\Support\Facades\Auth;
 
 
 class userController extends Controller
@@ -87,8 +86,6 @@ class userController extends Controller
                 ]);
             }
         }
-
-
 
         $user->name = $request->name ? $request->name : $user->name;
         $user->email = $request->email ? $request->email : $user->email;

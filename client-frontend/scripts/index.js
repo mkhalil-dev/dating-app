@@ -94,9 +94,14 @@ dating_app.load_signup = (retry = false) => {
         const warningbox = document.getElementById("email-warn");
         warningbox.innerText = "Email already in-use"
     }
-    joinBtn.addEventListener('click', function() {
+    joinBtn.addEventListener('click', function(e) {
         this.removeEventListener('click', arguments.callee);
-        signup()
+        if(e.target.parentNode.checkValidity()){
+            e.preventDefault()
+            signup()
+        } else {
+            dating_app.load_signup()
+        }
     })
 }
 
@@ -116,7 +121,7 @@ const profileFormData = async () => {
     const joinData = new FormData();
     const imageInput = document.getElementById("avatar").files[0]
     const image = await toBase64(imageInput);
-    joinData.set("image", image)
+    joinData.set("image", await image.split(",")[1])
     joinData.set("location", country)
     joinData.set("email", email)
     joinData.set("password", password)
@@ -125,7 +130,7 @@ const profileFormData = async () => {
     joinData.set("dob", dob)
     joinData.set("gender", gender)
     joinData.set("favgender", favgender)
-    return joinData;
+    return joinData
 }
 
 dating_app.load_editProfile = () => {
@@ -163,7 +168,7 @@ const update = async () => {
     const imageInput = document.getElementById("avatar").files[0]
     if(imageInput){
         const image = await toBase64(imageInput);
-        joinData.set("image", image)
+        joinData.set("image", await image.split(",")[1])
     }
     const update_url = `${dating_app.baseURL}/user/${userId()}`
     const response = await dating_app.postAPI(update_url, joinData)
@@ -176,7 +181,7 @@ const update = async () => {
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
 });
 

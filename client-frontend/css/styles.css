@@ -42,7 +42,7 @@
     padding: 5px;
 }
 
-.login-container > div {
+.login-container > div > form {
     display: flex;
     flex-flow: column nowrap;
     margin: 30px;
@@ -50,7 +50,7 @@
     align-items: center;
 }
 
-.login-container > div > input {
+.login-container > div > form > input {
     margin: 10px;
     border: 0;
     border-radius: 5px;
@@ -58,7 +58,7 @@
     width: 300px;
 }
 
-.login-container > div > select {
+.login-container > div > form > select {
   margin: 10px;
   border: 0;
   border-radius: 5px;
@@ -98,7 +98,7 @@
   width: 500px;
 }
 
-.login-container > div > div {
+.login-container > div > form > div {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-around;
