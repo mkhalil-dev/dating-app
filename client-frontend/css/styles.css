@@ -226,7 +226,7 @@ nav a{
 
 .hero > div {
     background-color: lightcoral;
-    height: 75vh;
+    min-height: 50vh;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -447,4 +447,21 @@ body{
 .time-left {
   float: left;
   color: #999;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: black !important;
+  }
+  nav{
+    display: none;
+  }
+  #ham-menu{
+    display: inline-block !important;
+    position: fixed;
+    right: 0;
+  }
+  .hero > div {
+    min-height: 50vh;
+  }
 }

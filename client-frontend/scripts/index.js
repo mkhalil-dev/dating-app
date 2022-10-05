@@ -326,6 +326,7 @@ const banListener = (button, id, url, blockStatus = false) => {
 }
 
 dating_app.load_center = async () => {
+    if(!userId()) window.location.href = "./login.html"
     menu_load()
     let addedContacts = [];
     const contactBox = document.querySelector(".card-container");
