@@ -54,9 +54,14 @@ dating_app.load_login = (retry = false) => {
     const loginBtn = document.getElementById("login-btn")
     const warningbox = document.querySelector(".loginpage").getElementsByTagName("p")[0];
     if(retry) warningbox.innerText = "Incorrect user or password"
-    loginBtn.addEventListener('click', function() {
+    loginBtn.addEventListener('click', function(e) {
         this.removeEventListener('click', arguments.callee);
-        login()
+        if(e.target.parentNode.checkValidity()){
+            e.preventDefault()
+            login()
+        } else {
+            dating_app.load_login()
+        }
     })
 }
 
